@@ -6,14 +6,11 @@
  *  @copyright MIT License (c) 2020 Vasista and Vishnuu.
  */
 #include <bits/stdc++.h>
-#include <Eigen/Dense>
 #include "opencv2/opencv.hpp"
 #include <opencv2/tracking/tracker.hpp>
 #include "robot.hpp"
 cv::RNG rng(12344);
 using robot::Robot;
-using Eigen::Matrix4f;
-using Eigen::Vector4f;
 
 /**
 * @brief A constructor function for the Transformation class
@@ -21,8 +18,8 @@ using Eigen::Vector4f;
 * @return None
 */
 Robot::Robot(string cfgPath) {
-	ioh = new IOHandler(cfgPath);
-	humanDetector = new DetTrack(ioh->getModelConfigPath(), ioh->getModelWeightsPath());
+  ioh = new IOHandler(cfgPath);
+  humanDetector = new DetTrack(ioh->getModelConfigPath(), ioh->getModelWeightsPath());
     depthEstimator = new DepthEstimator();
     transformer = new Transformation();
 }
@@ -33,8 +30,8 @@ Robot::Robot(string cfgPath) {
 * @return None
 */
 Robot::~Robot() {
-	delete ioh;
-	delete humanDetector;
+  delete ioh;
+  delete humanDetector;
     delete depthEstimator;
     delete transformer;
 }
@@ -53,7 +50,7 @@ void Robot::processData() {
     colors.emplace_back(cv::Scalar(rng.uniform(0,255), rng.uniform(0, 255), rng.uniform(0, 255)));
   }
 
-	if (ioh->getInputType()){
+  if (ioh->getInputType()){
         cv::Mat frame;
         frame = cv::imread(ioh->getInFilePath());
         //     preprocess img
@@ -71,22 +68,15 @@ void Robot::processData() {
 
         vector<double> trans = ioh->getTransform();
 
-        Matrix4f toRobotTransform;
-        toRobotTransform << trans[0],trans[1],trans[2],trans[3],
-                            trans[4],trans[5],trans[6],trans[7],
-                            trans[8],trans[9],trans[10],trans[11],
-                            trans[12],trans[13],trans[14],trans[15];
-
-        transformer->setTransform(toRobotTransform);
+        transformer->setTransform(trans);
         vector<vector<double>> positionsCam = depthEstimator->
         transform2dTo3d(bboxes, ioh->getHumanHeight(), ioh->getIntrinsics());
 
         std::stringstream ss;
         for(unsigned int i = 0; i< positionsCam.size(); ++i) {
-          Vector4f homoCords;
-          homoCords << positionsCam[i][0],positionsCam[i][1],positionsCam[i][2],1;
+          vector<double> pos = transformer->transformToRoboFrame(positionsCam[i]);
           ss << "***** 3D position of Box " << i+1 << " *****" << std::endl 
-          <<transformer->transformToRoboFrame(homoCords).head(3) << std::endl;
+          <<pos[0] << std::endl <<pos[1] << std::endl << pos[2] << std::endl;
         }
 
         std::cout<< ss.str() << std::endl;
@@ -110,13 +100,7 @@ void Robot::processData() {
 
       vector<double> trans = ioh->getTransform();
 
-      Matrix4f toRobotTransform;
-      toRobotTransform << trans[0],trans[1],trans[2],trans[3],
-                          trans[4],trans[5],trans[6],trans[7],
-                          trans[8],trans[9],trans[10],trans[11],
-                          trans[12],trans[13],trans[14],trans[15];
-
-      transformer->setTransform(toRobotTransform);
+      transformer->setTransform(trans);
       std::stringstream ss;
       int count =1;
       while(1){
@@ -137,16 +121,14 @@ void Robot::processData() {
 
           if(ioh->ifRecord()) video.write(pFrame);
 
-          // std::cout << bboxes[2][0]<<std::endl;
 
           vector<vector<double>> positionsCam = depthEstimator->
           transform2dTo3d(bboxes, ioh->getHumanHeight(), ioh->getIntrinsics());
 
           for(unsigned int i = 0; i< positionsCam.size(); ++i) {
-            Vector4f homoCords;
-            homoCords << positionsCam[i][0],positionsCam[i][1],positionsCam[i][2],1;
-            ss << "***** 3D position of Box " << i+1 << " of Frame: " << count <<" *****" << std::endl 
-            <<transformer->transformToRoboFrame(homoCords).head(3) << std::endl;
+            vector<double> pos = transformer->transformToRoboFrame(positionsCam[i]);
+            ss << "***** 3D position of Box " << i+1 << " *****" << std::endl 
+            <<pos[0] << std::endl <<pos[1] << std::endl << pos[2] << std::endl;
           }
           ss<< "----------------End of Frame---------------\n";
 
