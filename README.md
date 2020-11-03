@@ -96,30 +96,30 @@ AIP Sheet - https://docs.google.com/spreadsheets/d/1YPsMStteSjXmPFDnUeONrdbhdRGQ
 * ~~Create pipeline for detection and tracking~~
 * ~~Commenting and Doxygen Documenting~~
 * ~~Add unit test cases~~
-* Pass all Static testing cppcheck, cpplint, travis and coveralls
+* ~~Pass all Static testing cppcheck, cpplint, travis and coveralls~~
 * ~~Identify DL Model Source Repositories~~
-* PHASE 2 - Implementation of Classes
+* ~~PHASE 2 - Implementation of Classes~~
 * ~~Change Quadchart from PNG to PDF~~
-* Update travis yml for successfull build.
-* Add bash script to download yolo model weight and config file.
+* ~~Update travis yml for successfull build.~~
+* ~~Add bash script to download yolo model weight and config file.~~
 
 ## Iteration 2 requests
 ~~* Class related changes:~~
-~~  * 1) IO handler:~~
-~~    * Add parsing for model config path, model weights path, human height, image height, image width, camera intrinsics, camera to robot transformation.~~
-~~    * Remove all video related attributes and functions as it might cause error.~~
-~~    * Give access to all private variables via public functions.~~
-~~  * 2) Depth Estimation:~~
-~~    * Remove all attributes and add them as arguments to function.~~
-~~  * 3) DetTrack:~~
-~~    * Add attributes to store thresholds, image params and detected objects.~~
-~~    * Modify add trackers to take in input image.~~
+  ~~* 1) IO handler:~~
+~~* Add parsing for model config path, model weights path, human height, image height, image width, camera intrinsics, camera to robot transformation.~~
+~~* Remove all video related attributes and functions as it might cause error.~~
+~~* Give access to all private variables via public functions.~~
+~~* 2) Depth Estimation:~~
+~~* Remove all attributes and add them as arguments to function.~~
+~~* 3) DetTrack:~~
+~~* Add attributes to store thresholds, image params and detected objects.~~
+~~* Modify add trackers to take in input image.~~
 ~~* Unit Test related changes.~~
-~~  * 1) Add test cases for new ioh functions.~~
+~~* 1) Add test cases for new ioh functions.~~
   ~~* 2) Init test case for Robot class is reduntant - could remove it.~~
   ~~* 3) Change arguments input to IOU from x1,y1,w,h to x1,y1,x2,y2 in det and tracking test case.~~
 * ~~UML Diagrams: Update UML diagrams according to above changes.~~
-* Fix travis build errors.
+* ~~Fix travis build errors.~~
 ~~* It seems like eigen is causing build issues in travis. Lets substitute eigen. Update header files and implementation.~~
 
 ## Known Issues
