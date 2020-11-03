@@ -67,6 +67,7 @@ AIP Sheet - https://docs.google.com/spreadsheets/d/1YPsMStteSjXmPFDnUeONrdbhdRGQ
 * PHASE 2 - Implementation of Classes
 * ~~Change Quadchart from PNG to PDF~~
 * Update travis yml for successfull build.
+* Add bash script to download yolo model weight and config file.
 
 ## Iteration 2 requests
 ~~* Class related changes:~~
