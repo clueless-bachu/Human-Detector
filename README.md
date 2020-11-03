@@ -77,6 +77,7 @@ AIP Sheet - https://docs.google.com/spreadsheets/d/1YPsMStteSjXmPFDnUeONrdbhdRGQ
 * Unit Test related changes.
   * 1) Add test cases for new ioh functions.
   * 2) Init test case for Robot class is reduntant - could remove it.
+  * 3) Change arguments input to IOU from x1,y1,w,h to x1,y1,x2,y2 in det and tracking test case. 
 * UML Diagrams: Update UML diagrams according to above changes. 
 * Fix travis build errors. 
 
