@@ -20,8 +20,13 @@ Main Features:
 
 ## Personnel 
 
+### Phase 2
 * Vasista Ayyagiri (clueless-bachu) - Navigator
 * Vishnuu AD (vishnuu95) - Driver 
+
+### Phase 1
+* Vasista Ayyagiri (clueless-bachu) - Driver
+* Vishnuu AD (vishnuu95) - Navigator
 
 ## Dependencies
 
