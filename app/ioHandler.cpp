@@ -17,7 +17,8 @@ using vision::IOHandler;
 * @param None
 * @return None
 */
-IOHandler::IOHandler() {
+IOHandler::IOHandler(string cfgPath) {
+	this->argParse(cfgPath);
 }
 
 /**
@@ -34,6 +35,58 @@ IOHandler::~IOHandler() {
 * @return None
 */
 void IOHandler::argParse(string cfgPath) {
+	std::ifstream cFile (cfgPath);
+    if (cFile.is_open())
+    {
+        std::string line;
+        while(getline(cFile, line)){
+            line.erase(std::remove_if(line.begin(), line.end(), isspace),
+                                 line.end());
+            if(line[0] == '#' || line.empty())
+                continue;
+            auto delimiterPos = line.find("=");
+            string name = line.substr(0, delimiterPos);
+            string value = line.substr(delimiterPos + 1);
+
+
+            if(!name.compare("inPath")) this->inPath.assign(value);// = value.copy();
+            else if(!name.compare("outPath")) this->outPath = value;
+            else if(!name.compare("modelConfigPath")) this->modelConfigPath = value;
+            else if(!name.compare("modelWeightsPath")) this->modelWeightsPath = value;
+            else if(!name.compare("isImg") && !value.compare("true")) this->isImg = true;
+            else if(!name.compare("ifVisualize") && !value.compare("true")) this->ifVisualize = true;
+            else if(!name.compare("record") && !value.compare("true")) this->record = true;
+            else if(!name.compare("humanHeight")) this->humanHeight = std::stod(value);
+            else if(!name.compare("K")) {
+            	auto newPos = value.find(",");
+            	while(newPos != std::string::npos) {
+            		
+            		this->intrinsicParams.push_back(std::stod(value.substr(0, newPos)));
+            		value = value.substr(newPos+1);
+            		newPos = value.find(",");
+            	}
+
+            	this->intrinsicParams.push_back(std::stod(value));
+            }
+            else if(!name.compare("transform")) {
+                auto newPos = value.find(",");
+                while(newPos != std::string::npos) {
+                    
+                    this->transform.push_back(std::stod(value.substr(0, newPos)));
+                    value = value.substr(newPos+1);
+                    newPos = value.find(",");
+                }
+
+                this->transform.push_back(std::stod(value));
+            }
+            else if(!name.compare("imgWidth")) this->imgWidth = std::stoi(value);
+            else if(!name.compare("imgHeight")) this->imgHeight = std::stoi(value);
+        }
+        
+    }
+    else {
+        std::cerr << "Couldn't open config file for reading.\n";
+    }
     return;
 }
 
@@ -43,7 +96,7 @@ void IOHandler::argParse(string cfgPath) {
 * @return a boolean, if true then type is image, if false then type is video
 */
 bool IOHandler::getInputType() {
-    return false;
+    return this->isImg;
 }
 
 /**
@@ -52,17 +105,19 @@ bool IOHandler::getInputType() {
 * @return None
 */
 bool IOHandler::isVisualize() {
-    return false;
+    return this->ifVisualize;
 }
 
+bool IOHandler::ifRecord() {
+    return this->record;
+}
 /**
 * @brief returns the input image/video path
 * @param None
 * @return path - path to the data file
 */
 string IOHandler::getInFilePath() {
-    string path = "";
-    return path;
+    return this->inPath;
 }
 
 /**
@@ -71,8 +126,70 @@ string IOHandler::getInFilePath() {
 * @return path - path to the data file
 */
 string IOHandler::getOutFilePath() {
-    string path = "";
-    return path;
+    return this->outPath;
+}
+
+/**
+* @brief returns the config file path of the DNN
+* @param None
+* @return path - path to the data file
+*/
+string IOHandler::getModelConfigPath() {
+    return this->modelConfigPath;
+}
+
+/**
+* @brief returns the weightsfile path of the DNN
+* @param None
+* @return path - path to the data file
+*/
+string IOHandler::getModelWeightsPath() {
+    return this->modelWeightsPath;
+}
+
+/**
+* @brief returns the average assumed human height
+* @param None
+* @return human height
+*/
+double IOHandler::getHumanHeight() {
+	return this->humanHeight;
+}
+
+/**
+* @brief returns the camera intrinsics
+* @param None
+* @return Camera intrinsics
+*/
+vector<double> IOHandler::getIntrinsics() {
+	return this->intrinsicParams;
+}
+
+/**
+* @brief returns the 4x4 matrix camera to robot transform as a flat vector
+* @param None
+* @return Camera intrinsics
+*/
+vector<double> IOHandler::getTransform() {
+    return this->transform;
+}
+
+/**
+* @brief returns the image width
+* @param None
+* @return image width
+*/
+int IOHandler::getImgWidth() {
+	return this->imgWidth;
+}
+
+/**
+* @brief returns the image height
+* @param None
+* @return image height
+*/
+int IOHandler::getImgHeight() {
+	return this->imgHeight;
 }
 
 /**
@@ -81,16 +198,13 @@ string IOHandler::getOutFilePath() {
 * @param frame - the image on which the bounding boxes need to be drawn on
 * @return None
 */
-void IOHandler::drawBb(vector<vector<int>> bb, cv::Mat frame) {
-    return;
-}
+void IOHandler::drawBb(vector<vector<int>> bbs, cv::Mat frame, vector<cv::Scalar> colors) {
 
-/**
-* @brief adds frame to the video writer
-* @param frame - the image which needs to be appended to the video
-* @return None
-*/
-void IOHandler::addFrame(cv::Mat frame) {
+	for (unsigned int i=0; i< bbs.size(); ++i) {
+		cv::Rect rect(bbs[i][0], bbs[i][1], bbs[i][2], bbs[i][3]);
+		cv::rectangle(frame,rect,colors[i],3);	
+	}
+
     return;
 }
 
@@ -99,16 +213,9 @@ void IOHandler::addFrame(cv::Mat frame) {
 * @param frame - the image on which the bounding boxes need to be drawn on
 * @return None
 */
-void IOHandler::seeImg(cv::Mat frame) {
-    return;
-}
-
-/**
-* @brief visualizes an video
-* @param frames - A list of frames in sequential order
-* @return None
-*/
-void IOHandler::seeVideo(vector<cv::Mat> frames) {
+void IOHandler::seeImg(cv::Mat frame, int wait) {
+	cv::imshow("Human Tracking", frame);
+	cv::waitKey(wait);
     return;
 }
 
@@ -119,14 +226,6 @@ void IOHandler::seeVideo(vector<cv::Mat> frames) {
 * @return None
 */
 void IOHandler::saveImg(string path, cv::Mat frame) {
-    return;
-}
-
-/**
-* @brief save the video to a particular path
-* @param path - The path where the image should be saved
-* @return None
-*/
-void IOHandler::saveVideo(string path) {
+	cv::imwrite(path, frame);
     return;
 }
