@@ -77,7 +77,7 @@ void DetTrack::addTrackers
 */
 vector<vector<int>> DetTrack::detectHumans(cv::Mat *inImg) {
     Mat blob = cv::dnn::blobFromImage(*inImg, 1/255.0,
-      Size(imageWidth, imageHeight), Scalar(), false, false);
+      cv::Size(imageWidth, imageHeight), cv::Scalar(), false, false);
     yoloModel.setInput(blob, "");  // remaining params were optional.
     yoloModel.forward(detectedObjects, outNames);
     // std::cout << detectedObjects.size() << std::endl;
