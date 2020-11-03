@@ -20,7 +20,9 @@
 
 using std::vector;
 using vision::DetTrack;
-using cv;
+using cv::Mat;
+using cv::Tracker;
+using cv::Rect2d;
 
 /**
 * @brief A constructor function for the DetTrack class
@@ -55,7 +57,7 @@ DetTrack::~DetTrack() {
 */
 void DetTrack::addTrackers
 (cv::Mat *inImg, vector<vector<int>> bbDet) {
-    std::vector<Ptr<Tracker> > algorithms;
+    std::vector<cv::Ptr<Tracker> > algorithms;
     vector<Rect2d> objects;
     for (auto box : bbDet) {
         if (box[3]-box[1] < 100) continue;
