@@ -21,6 +21,9 @@ Main Features:
 Demo Video showing tracking and detection Phase 2
 [Video Link](https://youtu.be/-zgTyiFmhxQ)
 
+Sample image of tracking 
+![Tracking Image](https://github.com/clueless-bachu/Human-Detector/blob/iteration2/output.png)
+
 ## Personnel
 
 ### Phase 2
