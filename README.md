@@ -85,6 +85,7 @@ AIP Sheet - https://docs.google.com/spreadsheets/d/1YPsMStteSjXmPFDnUeONrdbhdRGQ
   ~~* 3) Change arguments input to IOU from x1,y1,w,h to x1,y1,x2,y2 in det and tracking test case.~~
 * ~~UML Diagrams: Update UML diagrams according to above changes.~~
 * Fix travis build errors.
+* It seems like eigen is causing build issues in travis. Lets substitute eigen. Update header files and implementation.
 
 ## Known Issues
 
