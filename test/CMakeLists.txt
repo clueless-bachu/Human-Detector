@@ -2,7 +2,13 @@ set(GTEST_SHUFFLE 1)
 
 add_executable(
     cpp-test
-    detectAndTracking.cpp  estimatingDepth.cpp  ioHandling.cpp  main.cpp  preprocessing.cpp  robot.cpp transforming.cpp
+    main.cpp  
+    detectAndTracking.cpp
+    estimatingDepth.cpp  
+    ioHandling.cpp 
+    preprocessing.cpp  
+    robot.cpp 
+    transforming.cpp
     ../app/depthEstimator.cpp  ../app/detTrack.cpp  ../app/ioHandler.cpp  ../app/preprocess.cpp  ../app/robot.cpp  ../app/transformation.cpp
 )
 

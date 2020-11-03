@@ -19,17 +19,6 @@ using robot::Robot;
  * @param None
  * @return None
  */
-TEST(robotTest, initialisation) {
-  string cfgPath = "../cfg/test.cfg";
-  Robot robot(cfgPath);
-  EXPECT_EQ(1, 1);
-}
-
-/**
- * @brief Test case to test the initialisation of the robot with the test config file
- * @param None
- * @return None
- */
 TEST(robotTest, dataProcessing) {
   string cfgPath = "../cfg/test.cfg";
   Robot robot(cfgPath);

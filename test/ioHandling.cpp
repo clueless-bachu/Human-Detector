@@ -18,15 +18,31 @@
 * @return None
 */
 TEST(ioHandling, parsing) {
-  IOHandler ioh;
-  string path = "../cfg/arg.cfg";
+  // IOHandler ioh;
+  string path = "../cfg/test.cfg";
   string inFile = "../data/sample_image.png";
   string outFile = "../result/sample_img.png";
-  ioh.argParse(path);
-  EXPECT_EQ(ioh.getInputType(), false);
-  EXPECT_EQ(ioh.isVisualize(), true);
+  string modelConfigPath = "../model/yolov3.cfg";
+  string modelWeightsPath = "../model/yolov3.weights";
+  vector<double> intrinsics= {100, 100, 194, 172.5, 2000};
+  vector<double> transform= {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+  double humanHeight = 1.7;
+
+  IOHandler ioh(path);
+  // ioh.argParse(path);
+  EXPECT_EQ(ioh.getInputType(), true);
+  EXPECT_EQ(ioh.isVisualize(), false);
+  EXPECT_EQ(ioh.ifRecord(), false);
+  EXPECT_EQ(ioh.getHumanHeight(), humanHeight);
   EXPECT_EQ(ioh.getInFilePath(), inFile);
   EXPECT_EQ(ioh.getOutFilePath(), outFile);
+  EXPECT_EQ(ioh.getModelConfigPath(), modelConfigPath);
+  EXPECT_EQ(ioh.getModelWeightsPath(), modelWeightsPath);
+  for(unsigned int i=0; i< transform.size(); ++i)
+  EXPECT_EQ(ioh.getTransform()[i], transform[i]);
+  for(unsigned int i=0; i< intrinsics.size(); ++i)
+  EXPECT_EQ(ioh.getIntrinsics()[i], intrinsics[i]);
+
 }
 
 /**
@@ -35,20 +51,20 @@ TEST(ioHandling, parsing) {
  * @return None
  */
 TEST(ioHandling, utilTesting) {
-  IOHandler ioh;
-  string path = "../cfg/arg.cfg";
+  string path = "../cfg/test.cfg";
   string inFile = "../data/sample_image.png";
   string outFile = "../result/sample_img.png";
-  ioh.argParse(path);
+  IOHandler ioh(path);
 
   cv::Mat inImg = cv::imread(inFile);
   vector<vector<int>> bbs = {
       {169, 43, 108, 268},
       {55, 45, 101, 287}};
 
-  ioh.drawBb(bbs, inImg);
-  ioh.addFrame(inImg);
-  ioh.seeImg(inImg);
+  vector<cv::Scalar> colors(bbs.size(), cv::Scalar(0,255,0));
+
+  ioh.drawBb(bbs, inImg, colors);
+  ioh.seeImg(inImg, 1);
   ioh.saveImg(outFile, inImg);
   EXPECT_EQ(1, 1);
 }

@@ -25,10 +25,11 @@ using std::vector;
 */
 class checkDetTrackClass : public ::testing::Test {
  protected:  // default variables
-  string modelPath = NULL;
-  string imgPath = NULL;
-  string labelPath = NULL;
-  cv::Mat img = cv::imread(imgPath);
+  string modelConfigPath = "";
+  string modelWeightsPath = "";
+  string imgPath = "";
+  string labelPath = "";
+  cv::Mat img;// = cv::imread(imgPath);
   DetTrack *tracker;
 
  public:
@@ -54,9 +55,11 @@ class checkDetTrackClass : public ::testing::Test {
   * @return None
   */
   virtual void SetUp() {
-    modelPath = "../models/yolo.pth";
-    imgPath = "../data/sample_img.png";
-    tracker = new DetTrack(modelPath);
+    string modelConfigPath = "../model/yolov3.cfg";
+    string modelWeightsPath = "../model/yolov3.weights";
+    imgPath = "/home/vasista/Desktop/Human-Detector/data/sample_image.png";
+    tracker = new DetTrack(modelConfigPath, modelWeightsPath);
+
   }
 
   /**
@@ -102,26 +105,29 @@ class checkDetTrackClass : public ::testing::Test {
  * @return None
 */
 TEST_F(checkDetTrackClass, detectAndTrackTest) {
-  cv::Mat img = cv::imread(imgPath);
+  img = cv::imread(imgPath);
   vector<vector<int>> labels(2, vector<int>(5, 1));
   auto iouThreshold = 0.7;
-  labels[0][0] = 169;
-  labels[0][1] = 43;
-  labels[0][2] = 108;
-  labels[0][3] = 268;
-  labels[0][4] = 1;
-  labels[1][0] = 55;
-  labels[1][1] = 45;
-  labels[1][2] = 101;
-  labels[1][3] = 287;
-  labels[1][4] = 2;
+  labels[1][0] = 169;
+  labels[1][1] = 43;
+  labels[1][2] = 108+169;
+  labels[1][3] = 268+43;
+  labels[1][4] = 1;
+  labels[0][0] = 55;
+  labels[0][1] = 45;
+  labels[0][2] = 101+55;
+  labels[0][3] = 287+45;
+  labels[0][4] = 2;
+  cv::Mat pImg;
+  cv::resize(img, pImg, cv::Size(416,416));
+  vector<vector<int>> boxes = tracker->trackHumans(&pImg);
 
-  vector<vector<int>> boxes = tracker->trackHumans(&img);
   bool match_found = false;
   for (auto box : boxes) {
     match_found = false;
     for (auto label : labels) {
-      auto iou = calcIOU(box, label);
+      vector<int> bb = {box[0],box[1],box[0]+box[2],box[1]+box[3]};
+      auto iou = calcIOU(bb, label);
       if (iou >= iouThreshold) {
         match_found = true;
         break;
