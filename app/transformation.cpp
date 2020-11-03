@@ -25,6 +25,7 @@ Transformation::Transformation() {
 * @return None
 */
 Transformation::~Transformation() {
+	delete this->transform;
 }
 
 /**
@@ -33,6 +34,8 @@ Transformation::~Transformation() {
 * @return None
 */
 void Transformation::setTransform(Eigen::Matrix4f transMat) {
+	this->transform = new Eigen::Matrix4f;
+	*(this->transform) = transMat;
     return;
 }
 
@@ -42,7 +45,7 @@ void Transformation::setTransform(Eigen::Matrix4f transMat) {
 * @return transMat - the transformation matrix from the camera frame to the robot frame
 */
 Eigen::Matrix4f Transformation::getTransform() {
-    Eigen::Matrix4f transformationMat;
+    Eigen::Matrix4f transformationMat = *(this->transform);
     return transformationMat;
 }
 
@@ -52,6 +55,6 @@ Eigen::Matrix4f Transformation::getTransform() {
 * @return newCords - New cordinates in the robot frame
 */
 Eigen::Vector4f Transformation::transformToRoboFrame(Eigen::Vector4f camCord) {
-    Eigen::Vector4f newCords;
+    Eigen::Vector4f newCords  = (*(this->transform))*camCord;
     return newCords;
 }
