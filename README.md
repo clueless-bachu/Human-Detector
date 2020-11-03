@@ -20,15 +20,15 @@ Main Features:
 
 ## Personnel 
 
-* Vasista Ayyagiri (clueless-bachu)
-* Vishnuu AD (vishnuu95)
+* Vasista Ayyagiri (clueless-bachu) - Navigator
+* Vishnuu AD (vishnuu95) - Driver 
 
 ## Dependencies
 
 * OpenCV
 * Google Test
 * Google Mock
-* Eigen
+* Eigen3
 
 ## Standard install via command-line
 ```
@@ -62,6 +62,23 @@ AIP Sheet - https://docs.google.com/spreadsheets/d/1YPsMStteSjXmPFDnUeONrdbhdRGQ
 * PHASE 2 - Implementation of Classes
 * Change Quadchart from PNG to PDF
 * Update travis yml for successfull build. 
+
+## Iteration 2 requests
+* Class related changes: 
+  * 1) IO handler:
+    * Add parsing for model config path, model weights path, human height, image height, image width, camera intrinsics, camera to robot transformation.
+    * Remove all video related attributes and functions as it might cause error. 
+    * Give access to all private variables via public functions.
+  * 2) Depth Estimation:
+    * Remove all attributes and add them as arguments to function. 
+  * 3) DetTrack: 
+    * Add attributes to store thresholds, image params and detected objects. 
+    * Modify add trackers to take in input image. 
+* Unit Test related changes.
+  * 1) Add test cases for new ioh functions.
+  * 2) Init test case for Robot class is reduntant - could remove it.
+* UML Diagrams: Update UML diagrams according to above changes. 
+* Fix travis build errors. 
 
 ## Known Issues
 
