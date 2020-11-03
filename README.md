@@ -18,6 +18,9 @@ Main Features:
 3 Minute Video for Phase 1
 [Video Link](https://www.youtube.com/watch?v=N3DkdJLmnMI&feature=youtu.be)
 
+Demo Video showing tracking and detection Phase 2
+[Video Link](https://youtu.be/-zgTyiFmhxQ)
+
 ## Personnel
 
 ### Phase 2
