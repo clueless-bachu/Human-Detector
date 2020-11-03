@@ -13,14 +13,14 @@ namespace vision {
 
 class Transformation {
  private:
-    Eigen::Matrix4f *transform;
+    std::vector<double> transform;
 
  public:
     Transformation();
     ~Transformation();
-    void setTransform(Eigen::Matrix4f);
-    Eigen::Matrix4f getTransform();
-    Eigen::Vector4f transformToRoboFrame(Eigen::Vector4f);
+    void setTransform(std::vector<double>);
+    std::vector<double> getTransform();
+    std::vector<double> transformToRoboFrame(std::vector<double>);
 };
 
 }  // namespace vision
