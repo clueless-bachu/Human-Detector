@@ -5,7 +5,6 @@
  *  @brief This file contains test all test cases for Detection and Tracking
  *  @copyright MIT License (c) 2020 Vasista and Vishnuu.
  */
-#include <Eigen/Dense>
 #include <bits/stdc++.h>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>

@@ -6,7 +6,6 @@
  *  @copyright MIT License (c) 2020 Vasista and Vishnuu.
  */
 #include <gtest/gtest.h>
-#include <Eigen/Dense>
 #include <bits/stdc++.h>
 #include <utility>
 #include "opencv2/opencv.hpp"

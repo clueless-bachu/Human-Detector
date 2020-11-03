@@ -6,7 +6,6 @@
  *  @copyright MIT License (c) 2020 Vasista and Vishnuu.
  */
 #include <gtest/gtest.h>
-#include <Eigen/Dense>
 #include <bits/stdc++.h>
 #include "opencv2/opencv.hpp"
 #include <opencv2/tracking/tracker.hpp>
