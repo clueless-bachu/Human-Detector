@@ -24,6 +24,23 @@ Demo Video showing tracking and detection Phase 2
 Sample image of tracking 
 ![Tracking Image](https://github.com/clueless-bachu/Human-Detector/blob/iteration2/output.png)
 
+Sample 3d Location of Human Output
+***** 3D position of Box 1 *****
+-0.313408
+0.0624172
+0.949721
+***** 3D position of Box 2 *****
+-0.0230352
+0.0700556
+0.921409
+***** 3D position of Box 3 *****
+0.0236111
+-0.221101
+1.57407
+***** 3D position of Box 4 *****
+-0.426616
+-0.094959
+1.29278
 ## Personnel
 
 ### Phase 2
