@@ -17,6 +17,8 @@ using std::vector;
 * @return None
 */
 DepthEstimator::DepthEstimator() {
+    // this->humanHeight = humanHeight;
+    // this->intrinsicParams = intrinsicParams;
 }
 
 /**
@@ -33,8 +35,14 @@ DepthEstimator::~DepthEstimator() {
 * representing a human
 * @return depths - a vector of doubles representing the depth values of each bounding box
 */
-vector<double> DepthEstimator::estimateDepth(vector<vector<int>> bbs) {
-    vector<double> depths(2, 0.0);
+vector<double> DepthEstimator::estimateDepth
+(vector<vector<int>> bbs, double humanHeight, vector<double> intrinsicParams) {
+    vector<double> depths(bbs.size());
+
+    for (unsigned int i = 0; i< bbs.size(); ++i) {
+        depths[i] = intrinsicParams[0]*0.001*
+        humanHeight*intrinsicParams[4]/bbs[i][3];
+    }
     return depths;
 }
 
@@ -46,8 +54,26 @@ vector<double> DepthEstimator::estimateDepth(vector<vector<int>> bbs) {
 * @return depths - a vector of cordinates representing the x,y,z values with
 * respect to the camera coordinate frame
 */
-vector<vector<double>>
-DepthEstimator::transform2dTo3d(vector<vector<int>> bbs) {
-    vector<vector<double>> cords3d(2, vector<double>(3, 0.0));
+vector<vector<double>> DepthEstimator::transform2dTo3d
+(vector<vector<int>> bbs, double humanHeight, vector<double> intrinsicParams) {
+    vector<vector<double>> cords3d(bbs.size(), vector<double>(bbs.size()));
+
+    vector<double> depths = this->estimateDepth(bbs, humanHeight,
+                                  intrinsicParams);
+
+    for (unsigned int i = 0; i< bbs.size(); ++i) {
+        double x, y, X, Y;
+        x = (bbs[i][0]+bbs[i][2])/2;
+        y = (bbs[i][1]+bbs[i][3])/2;
+
+        X = (x - intrinsicParams[2])*depths[i]/
+                  (intrinsicParams[1]*0.001*intrinsicParams[4]);
+        Y = (y - intrinsicParams[3])*depths[i]/
+                  (intrinsicParams[2]*0.001*intrinsicParams[4]);
+        vector<double> pos = {X, Y, depths[i]};
+        cords3d[i] = pos;
+    }
+
     return cords3d;
 }
+

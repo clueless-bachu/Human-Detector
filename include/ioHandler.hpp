@@ -15,26 +15,38 @@ namespace vision {
 
 class IOHandler {
  private:
-    string outPath = NULL;
-    string inPath = NULL;
-    bool isImg = false, ifVisualize = false;
-    cv::VideoWriter *video;
+    string outPath;
+    string inPath;
+    string modelConfigPath = "";
+    string modelWeightsPath = "";
+    bool isImg = false, ifVisualize = false, record = false;
+    double humanHeight = 0;
+    vector<double> intrinsicParams;
+    vector<double> transform;
+    int imgWidth;
+    int imgHeight;
 
  public:
-    IOHandler();
+    int yoloWidth = 416;
+    int yoloHeight = 416;
+    explicit IOHandler(string);
     ~IOHandler();
     void argParse(string);
     bool getInputType();
     bool isVisualize();
+    bool ifRecord();
     string getInFilePath();
     string getOutFilePath();
-
-    void drawBb(vector<vector<int>>, cv::Mat);
-    void addFrame(cv::Mat);
-    static void seeImg(cv::Mat);
-    static void seeVideo(vector<cv::Mat>);
+    string getModelConfigPath();
+    string getModelWeightsPath();
+    double getHumanHeight();
+    int getImgWidth();
+    int getImgHeight();
+    vector<double> getIntrinsics();
+    vector<double> getTransform();
+    void drawBb(vector<vector<int>>, cv::Mat,  vector<cv::Scalar>);
+    static void seeImg(cv::Mat, int);
     void saveImg(string, cv::Mat);
-    void saveVideo(string);
 };
 
 }  // namespace vision

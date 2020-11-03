@@ -1,0 +1,95 @@
+\href{https://travis-ci.org/clueless-bachu/Human-Detector}{\tt } \subsection*{\href{https://coveralls.io/github/clueless-bachu/Human-Detector?branch=master}{\tt } }
+
+\subsection*{Overview \& Description}
+
+The ability of a robot to understand the environment is vital for autonomy. Our product is a\+Human Detection and Tracking software. The ability to detect and track humans opens up multipleopportunities for robots to imbibe reactive behaviours that can potentially lead to better Human-\/\+Robot Interaction, safety protocols, efficient path planning etc.
+
+Main Features\+:
+\begin{DoxyItemize}
+\item Detection and Tracking Module
+\item Depth Estimation Module
+\item 3D Transfomation Module
+\item Image Preprocessing Module
+\item I\+O\+Hanlder Module
+\item Robot Module that shows demo of Perception Module Integration with Robot.
+\end{DoxyItemize}
+
+3 Minute Video for Phase 1 \href{https://www.youtube.com/watch?v=N3DkdJLmnMI&feature=youtu.be}{\tt Video Link}
+
+\subsection*{Personnel}
+
+\subsubsection*{Phase 2}
+
+
+\begin{DoxyItemize}
+\item Vasista Ayyagiri (clueless-\/bachu) -\/ Navigator
+\item Vishnuu AD (vishnuu95) -\/ Driver
+\end{DoxyItemize}
+
+\subsubsection*{Phase 1}
+
+
+\begin{DoxyItemize}
+\item Vasista Ayyagiri (clueless-\/bachu) -\/ Driver
+\item Vishnuu AD (vishnuu95) -\/ Navigator
+\end{DoxyItemize}
+
+\subsection*{Dependencies}
+
+
+\begin{DoxyItemize}
+\item Open\+CV
+\item Google Test
+\item Google Mock
+\item Eigen3
+\end{DoxyItemize}
+
+\#\# Standard install via command-\/line 
+\begin{DoxyCode}
+git clone --recursive https://github.com/clueless-bachu/Human-Detector.git
+cd <path to repository>
+mkdir build
+cd build
+cmake ..
+make
+Run tests: ./test/cpp-test
+Run program: ./app/shell-app
+\end{DoxyCode}
+
+
+\subsection*{Product Backlog File}
+
+Google Doc Planning Sheet -\/ \href{https://docs.google.com/document/d/1vK4eTWuJDBQswQ49AHXX5LzxAnbU5EcfVC7Dlu_3VPk/edit?usp=sharing}{\tt https\+://docs.\+google.\+com/document/d/1v\+K4e\+T\+Wu\+J\+D\+B\+Qsw\+Q49\+A\+H\+X\+X5\+Lzx\+Anb\+U5\+Ecf\+V\+C7\+Dlu\+\_\+3\+V\+Pk/edit?usp=sharing}
+
+A\+IP Sheet -\/ \href{https://docs.google.com/spreadsheets/d/1YPsMStteSjXmPFDnUeONrdbhdRGQZ498H-M4ctVbVvw/edit?usp=sharing}{\tt https\+://docs.\+google.\+com/spreadsheets/d/1\+Y\+Ps\+M\+Stte\+Sj\+Xm\+P\+F\+Dn\+Ue\+O\+Nrdbhd\+R\+G\+Q\+Z498\+H-\/\+M4ct\+Vb\+Vvw/edit?usp=sharing}
+
+\subsection*{T\+O\+DO}
+
+
+\begin{DoxyItemize}
+\item $\sim$$\sim$\+Design U\+ML diagrams and Activity Flow$\sim$$\sim$
+\item $\sim$$\sim$\+Download and install required technologies$\sim$$\sim$
+\item $\sim$$\sim$\+Declare all classes$\sim$$\sim$
+\item $\sim$$\sim$\+Add stub Functions for each class$\sim$$\sim$
+\item $\sim$$\sim$\+Create pipeline for detection and tracking$\sim$$\sim$
+\item $\sim$$\sim$\+Commenting and Doxygen Documenting$\sim$$\sim$
+\item $\sim$$\sim$\+Add unit test cases$\sim$$\sim$
+\item Pass all Static testing cppcheck, cpplint, travis and coveralls
+\item $\sim$$\sim$\+Identify DL Model Source Repositories$\sim$$\sim$
+\item P\+H\+A\+SE 2 -\/ Implementation of Classes
+\item $\sim$$\sim$\+Change Quadchart from P\+NG to P\+D\+F$\sim$$\sim$
+\item Update travis yml for successfull build.
+\item Add bash script to download yolo model weight and config file.
+\end{DoxyItemize}
+
+\subsection*{Iteration 2 requests}
+
+$\sim$$\sim$$\ast$ Class related changes\+:$\sim$$\sim$ $\sim$$\sim$ $\ast$ 1) IO handler\+:$\sim$$\sim$ $\sim$$\sim$ $\ast$ Add parsing for model config path, model weights path, human height, image height, image width, camera intrinsics, camera to robot transformation.$\sim$$\sim$ $\sim$$\sim$ $\ast$ Remove all video related attributes and functions as it might cause error.$\sim$$\sim$ $\sim$$\sim$ $\ast$ Give access to all private variables via public functions.$\sim$$\sim$ $\sim$$\sim$ $\ast$ 2) Depth Estimation\+:$\sim$$\sim$ $\sim$$\sim$ $\ast$ Remove all attributes and add them as arguments to function.$\sim$$\sim$ $\sim$$\sim$ $\ast$ 3) Det\+Track\+:$\sim$$\sim$ $\sim$$\sim$ $\ast$ Add attributes to store thresholds, image params and detected objects.$\sim$$\sim$ $\sim$$\sim$ $\ast$ Modify add trackers to take in input image.$\sim$$\sim$ $\sim$$\sim$$\ast$ Unit Test related changes.$\sim$$\sim$ $\sim$$\sim$ $\ast$ 1) Add test cases for new ioh functions.$\sim$$\sim$ $\sim$$\sim$$\ast$ 2) Init test case for Robot class is reduntant -\/ could remove it.$\sim$$\sim$ $\sim$$\sim$$\ast$ 3) Change arguments input to I\+OU from x1,y1,w,h to x1,y1,x2,y2 in det and tracking test case.$\sim$$\sim$
+\begin{DoxyItemize}
+\item $\sim$$\sim$\+U\+ML Diagrams\+: Update U\+ML diagrams according to above changes.$\sim$$\sim$
+\item Fix travis build errors. $\sim$$\sim$$\ast$ It seems like eigen is causing build issues in travis. Lets substitute eigen. Update header files and implementation.$\sim$$\sim$
+\end{DoxyItemize}
+
+\subsection*{Known Issues}
+
+$\sim$$\sim$$\ast$ Need to fix Complier Warnings.$\sim$$\sim$ 

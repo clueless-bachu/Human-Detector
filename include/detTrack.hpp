@@ -16,13 +16,21 @@ namespace vision {
 
 class DetTrack {
  private:
-    cv::MultiTracker *trackers;
-    cv::dnn::Net *yoloModel;
+  cv::Ptr<cv::MultiTracker> trackers;
+  vector<vector<int>> trackersBbox;
+  cv::dnn::Net yoloModel;
+  vector<string> outNames;
+  int imageWidth;
+  int imageHeight;
+  vector<cv::Mat> detectedObjects;
+  float confThreshold;
+  float nmsThreshold;
+  int count = 0;
 
  public:
-    explicit DetTrack(string);
+    DetTrack(string, string);
     ~DetTrack();
-    void addTrackers(vector<vector<int>>, vector<vector<int>>);
+    void addTrackers(cv::Mat *, vector<vector<int>>);
     vector<vector<int>> detectHumans(cv::Mat *);
     vector<vector<int>> trackHumans(cv::Mat *);
 };

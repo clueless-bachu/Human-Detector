@@ -6,7 +6,6 @@
  *  @copyright MIT License (c) 2020 Vasista and Vishnuu.
  */
 #include <bits/stdc++.h>
-#include <Eigen/Dense>
 #include "opencv2/opencv.hpp"
 #include <opencv2/tracking/tracker.hpp>
 #include "robot.hpp"

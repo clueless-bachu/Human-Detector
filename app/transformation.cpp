@@ -6,10 +6,10 @@
  *  @copyright MIT License (c) 2020 Vasista and Vishnuu.
  */
 #include <bits/stdc++.h>
-#include <Eigen/Dense>
 #include "transformation.hpp"
 
 using vision::Transformation;
+using std::vector;
 
 /**
 * @brief A constructor function for the Transformation class
@@ -32,7 +32,8 @@ Transformation::~Transformation() {
 * @param transMat - the transformation matrix from the camera frame to the robot frame
 * @return None
 */
-void Transformation::setTransform(Eigen::Matrix4f transMat) {
+void Transformation::setTransform(vector<double> transMat) {
+    this->transform = transMat;
     return;
 }
 
@@ -41,9 +42,8 @@ void Transformation::setTransform(Eigen::Matrix4f transMat) {
 * @param None
 * @return transMat - the transformation matrix from the camera frame to the robot frame
 */
-Eigen::Matrix4f Transformation::getTransform() {
-    Eigen::Matrix4f transformationMat;
-    return transformationMat;
+vector<double> Transformation::getTransform() {
+    return this->transform;
 }
 
 /**
@@ -51,7 +51,14 @@ Eigen::Matrix4f Transformation::getTransform() {
 * @param camCord - 3D coordinate in the camera frame
 * @return newCords - New cordinates in the robot frame
 */
-Eigen::Vector4f Transformation::transformToRoboFrame(Eigen::Vector4f camCord) {
-    Eigen::Vector4f newCords;
+vector<double> Transformation::transformToRoboFrame(vector<double> camCord) {
+    vector<double>  newCords = {
+this->transform[0]*camCord[0] + this->transform[1]*camCord[1]
++ this->transform[2]*camCord[2] + this->transform[3],
+this->transform[4]*camCord[0] + this->transform[5]*camCord[1]
++ this->transform[6]*camCord[2] + this->transform[7],
+this->transform[8]*camCord[0] + this->transform[9]*camCord[1]
++this->transform[10]*camCord[2] + this->transform[11]
+    };
     return newCords;
 }
