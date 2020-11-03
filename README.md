@@ -24,23 +24,30 @@ Demo Video showing tracking and detection Phase 2
 Sample image of tracking 
 ![Tracking Image](https://github.com/clueless-bachu/Human-Detector/blob/iteration2/output.png)
 
+5 Minute Video for Phase 2
+[Video Link](https://youtu.be/FQ8x5CnCaU0)
+
 Sample 3d Location of Human Output
-***** 3D position of Box 1 *****
+3D position of Box 1 
 -0.313408
 0.0624172
 0.949721
-***** 3D position of Box 2 *****
+
+3D position of Box 2
 -0.0230352
 0.0700556
 0.921409
-***** 3D position of Box 3 *****
+
+3D position of Box 3 
 0.0236111
 -0.221101
 1.57407
-***** 3D position of Box 4 *****
+
+3D position of Box 4
 -0.426616
 -0.094959
 1.29278
+
 ## Personnel
 
 ### Phase 2
@@ -62,6 +69,10 @@ Sample 3d Location of Human Output
 ```
 git clone --recursive https://github.com/clueless-bachu/Human-Detector.git
 cd <path to repository>
+mkdir model
+cd model
+bash ../yolov3_requirements.sh
+cd ..
 mkdir build
 cd build
 cmake ..
