@@ -15,12 +15,12 @@ namespace vision {
 
 class DepthEstimator {
  private:
-
  public:
     DepthEstimator();
     ~DepthEstimator();
     vector<double> estimateDepth(vector<vector<int>>, double, vector<double>);
-    vector<vector<double>> transform2dTo3d(vector<vector<int>>, double, vector<double>);
+    vector<vector<double>>
+     transform2dTo3d(vector<vector<int>>, double, vector<double>);
 };
 
 }  // namespace vision

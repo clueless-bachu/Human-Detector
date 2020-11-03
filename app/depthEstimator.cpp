@@ -17,8 +17,8 @@ using std::vector;
 * @return None
 */
 DepthEstimator::DepthEstimator() {
-	// this->humanHeight = humanHeight;
-	// this->intrinsicParams = intrinsicParams;
+    // this->humanHeight = humanHeight;
+    // this->intrinsicParams = intrinsicParams;
 }
 
 /**
@@ -39,9 +39,9 @@ vector<double> DepthEstimator::estimateDepth
 (vector<vector<int>> bbs, double humanHeight, vector<double> intrinsicParams) {
     vector<double> depths(bbs.size());
 
-    for(unsigned int i=0; i< bbs.size(); ++i) {
-    	depths[i] = intrinsicParams[0]*0.001*
-    	humanHeight*intrinsicParams[4]/bbs[i][3];
+    for (unsigned int i = 0; i< bbs.size(); ++i) {
+        depths[i] = intrinsicParams[0]*0.001*
+        humanHeight*intrinsicParams[4]/bbs[i][3];
     }
     return depths;
 }
@@ -58,18 +58,22 @@ vector<vector<double>> DepthEstimator::transform2dTo3d
 (vector<vector<int>> bbs, double humanHeight, vector<double> intrinsicParams) {
     vector<vector<double>> cords3d(bbs.size(), vector<double>(bbs.size()));
 
-    vector<double> depths = this->estimateDepth(bbs,humanHeight, intrinsicParams);
+    vector<double> depths = this->estimateDepth(bbs, humanHeight,
+                                  intrinsicParams);
 
-	for(unsigned int i =0; i< bbs.size(); ++i) {
-		double x,y,X,Y;
-		x = (bbs[i][0]+bbs[i][2])/2;
-		y = (bbs[i][1]+bbs[i][3])/2;
+    for (unsigned int i = 0; i< bbs.size(); ++i) {
+        double x, y, X, Y;
+        x = (bbs[i][0]+bbs[i][2])/2;
+        y = (bbs[i][1]+bbs[i][3])/2;
 
-		X = (x - intrinsicParams[2])*depths[i]/(intrinsicParams[1]*0.001*intrinsicParams[4]);
-		Y = (y - intrinsicParams[3])*depths[i]/(intrinsicParams[2]*0.001*intrinsicParams[4]);
-		vector<double> pos = {X,Y, depths[i]};
-		cords3d[i] = pos;
-	}
+        X = (x - intrinsicParams[2])*depths[i]/
+                  (intrinsicParams[1]*0.001*intrinsicParams[4]);
+        Y = (y - intrinsicParams[3])*depths[i]/
+                  (intrinsicParams[2]*0.001*intrinsicParams[4]);
+        vector<double> pos = {X, Y, depths[i]};
+        cords3d[i] = pos;
+    }
 
     return cords3d;
 }
+

@@ -22,11 +22,9 @@ using vision::Preprocessor;
 */
 void Preprocessor::preprocess
 (pair<int, int> size, int blurKernel, cv::Mat* inImg, cv::Mat* outImg) {
-
-	cv::resize(*inImg, *outImg, cv::Size(size.first, size.second), 0, 0, cv::INTER_LINEAR);
-
-	if(blurKernel)
-	cv::GaussianBlur(*outImg, *outImg, cv::Size(blurKernel, blurKernel), 0);
-
+    cv::resize(*inImg, *outImg,
+     cv::Size(size.first, size.second), 0, 0, cv::INTER_LINEAR);
+    if (blurKernel)
+    cv::GaussianBlur(*outImg, *outImg, cv::Size(blurKernel, blurKernel), 0);
     return;
 }

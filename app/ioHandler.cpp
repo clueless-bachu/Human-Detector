@@ -18,7 +18,7 @@ using vision::IOHandler;
 * @return None
 */
 IOHandler::IOHandler(string cfgPath) {
-	this->argParse(cfgPath);
+    this->argParse(cfgPath);
 }
 
 /**
@@ -35,56 +35,60 @@ IOHandler::~IOHandler() {
 * @return None
 */
 void IOHandler::argParse(string cfgPath) {
-	std::ifstream cFile (cfgPath);
-    if (cFile.is_open())
-    {
+    std::ifstream cFile(cfgPath);
+    if (cFile.is_open()) {
         std::string line;
-        while(getline(cFile, line)){
+        while (getline(cFile, line)) {
             line.erase(std::remove_if(line.begin(), line.end(), isspace),
                                  line.end());
-            if(line[0] == '#' || line.empty())
+            if (line[0] == '#' || line.empty())
                 continue;
             auto delimiterPos = line.find("=");
             string name = line.substr(0, delimiterPos);
             string value = line.substr(delimiterPos + 1);
 
 
-            if(!name.compare("inPath")) this->inPath.assign(value);// = value.copy();
-            else if(!name.compare("outPath")) this->outPath = value;
-            else if(!name.compare("modelConfigPath")) this->modelConfigPath = value;
-            else if(!name.compare("modelWeightsPath")) this->modelWeightsPath = value;
-            else if(!name.compare("isImg") && !value.compare("true")) this->isImg = true;
-            else if(!name.compare("ifVisualize") && !value.compare("true")) this->ifVisualize = true;
-            else if(!name.compare("record") && !value.compare("true")) this->record = true;
-            else if(!name.compare("humanHeight")) this->humanHeight = std::stod(value);
-            else if(!name.compare("K")) {
-            	auto newPos = value.find(",");
-            	while(newPos != std::string::npos) {
-            		
-            		this->intrinsicParams.push_back(std::stod(value.substr(0, newPos)));
-            		value = value.substr(newPos+1);
-            		newPos = value.find(",");
-            	}
-
-            	this->intrinsicParams.push_back(std::stod(value));
-            }
-            else if(!name.compare("transform")) {
+            if (!name.compare("inPath")) {
+             this->inPath.assign(value);  // = value.copy();
+            } else if (!name.compare("outPath")) {
+             this->outPath = value;
+            } else if (!name.compare("modelConfigPath")) {
+             this->modelConfigPath = value;
+            } else if (!name.compare("modelWeightsPath")) {
+             this->modelWeightsPath = value;
+            } else if (!name.compare("isImg") && !value.compare("true")) {
+             this->isImg = true;
+            } else if (!name.compare("ifVisualize") && !value.compare("true")) {
+             this->ifVisualize = true;
+            } else if (!name.compare("record") && !value.compare("true")) {
+             this->record = true;
+            } else if (!name.compare("humanHeight")) {
+             this->humanHeight = std::stod(value);
+            } else if (!name.compare("K")) {
                 auto newPos = value.find(",");
-                while(newPos != std::string::npos) {
-                    
-                    this->transform.push_back(std::stod(value.substr(0, newPos)));
+                while (newPos != std::string::npos) {
+                     this->intrinsicParams.push_back(
+                                      std::stod(value.substr(0, newPos)));
                     value = value.substr(newPos+1);
                     newPos = value.find(",");
                 }
-
+                this->intrinsicParams.push_back(std::stod(value));
+            } else if (!name.compare("transform")) {
+                auto newPos = value.find(",");
+                while (newPos != std::string::npos) {
+                    this->transform.push_back
+                    (std::stod(value.substr(0, newPos)));
+                    value = value.substr(newPos+1);
+                    newPos = value.find(",");
+                }
                 this->transform.push_back(std::stod(value));
+            } else if (!name.compare("imgWidth")) {
+                this->imgWidth = std::stoi(value);
+            } else if (!name.compare("imgHeight")) {
+                this->imgHeight = std::stoi(value);
             }
-            else if(!name.compare("imgWidth")) this->imgWidth = std::stoi(value);
-            else if(!name.compare("imgHeight")) this->imgHeight = std::stoi(value);
         }
-        
-    }
-    else {
+    } else {
         std::cerr << "Couldn't open config file for reading.\n";
     }
     return;
@@ -101,13 +105,18 @@ bool IOHandler::getInputType() {
 
 /**
 * @brief returns condition to visualize data or not
-* @param cfgPath - A path to the cfg file 
-* @return None
+* @param None
+* @return bool
 */
 bool IOHandler::isVisualize() {
     return this->ifVisualize;
 }
 
+/**
+* @brief returns condition to record to not
+* @param none
+* @return bool
+*/
 bool IOHandler::ifRecord() {
     return this->record;
 }
@@ -153,7 +162,7 @@ string IOHandler::getModelWeightsPath() {
 * @return human height
 */
 double IOHandler::getHumanHeight() {
-	return this->humanHeight;
+    return this->humanHeight;
 }
 
 /**
@@ -162,7 +171,7 @@ double IOHandler::getHumanHeight() {
 * @return Camera intrinsics
 */
 vector<double> IOHandler::getIntrinsics() {
-	return this->intrinsicParams;
+    return this->intrinsicParams;
 }
 
 /**
@@ -180,7 +189,7 @@ vector<double> IOHandler::getTransform() {
 * @return image width
 */
 int IOHandler::getImgWidth() {
-	return this->imgWidth;
+    return this->imgWidth;
 }
 
 /**
@@ -189,7 +198,7 @@ int IOHandler::getImgWidth() {
 * @return image height
 */
 int IOHandler::getImgHeight() {
-	return this->imgHeight;
+    return this->imgHeight;
 }
 
 /**
@@ -198,13 +207,12 @@ int IOHandler::getImgHeight() {
 * @param frame - the image on which the bounding boxes need to be drawn on
 * @return None
 */
-void IOHandler::drawBb(vector<vector<int>> bbs, cv::Mat frame, vector<cv::Scalar> colors) {
-
-	for (unsigned int i=0; i< bbs.size(); ++i) {
-		cv::Rect rect(bbs[i][0], bbs[i][1], bbs[i][2], bbs[i][3]);
-		cv::rectangle(frame,rect,colors[i],3);	
-	}
-
+void IOHandler::drawBb
+    (vector<vector<int>> bbs, cv::Mat frame, vector<cv::Scalar> colors) {
+    for (unsigned int i = 0; i< bbs.size(); ++i) {
+        cv::Rect rect(bbs[i][0], bbs[i][1], bbs[i][2], bbs[i][3]);
+        cv::rectangle(frame, rect, colors[i], 3);
+    }
     return;
 }
 
@@ -214,8 +222,8 @@ void IOHandler::drawBb(vector<vector<int>> bbs, cv::Mat frame, vector<cv::Scalar
 * @return None
 */
 void IOHandler::seeImg(cv::Mat frame, int wait) {
-	cv::imshow("Human Tracking", frame);
-	cv::waitKey(wait);
+    cv::imshow("Human Tracking", frame);
+    cv::waitKey(wait);
     return;
 }
 
@@ -226,6 +234,6 @@ void IOHandler::seeImg(cv::Mat frame, int wait) {
 * @return None
 */
 void IOHandler::saveImg(string path, cv::Mat frame) {
-	cv::imwrite(path, frame);
+    cv::imwrite(path, frame);
     return;
 }

@@ -25,12 +25,11 @@ class IOHandler {
     vector<double> transform;
     int imgWidth;
     int imgHeight;
-    
 
  public:
     int yoloWidth = 416;
     int yoloHeight = 416;
-    IOHandler(string);
+    explicit IOHandler(string);
     ~IOHandler();
     void argParse(string);
     bool getInputType();
@@ -40,7 +39,6 @@ class IOHandler {
     string getOutFilePath();
     string getModelConfigPath();
     string getModelWeightsPath();
-    
     double getHumanHeight();
     int getImgWidth();
     int getImgHeight();

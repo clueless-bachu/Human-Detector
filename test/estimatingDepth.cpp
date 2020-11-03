@@ -25,7 +25,8 @@ TEST(depthEstimation, estimateDepth) {
   vector<double> intrinsicParams = {100, 100, 194, 172.5, 2000};
 
   vector<double> depths = {1.26, 1.18};
-  vector<double> computedDepths = depthE.estimateDepth(bbs, humanHeight, intrinsicParams);
+  vector<double> computedDepths
+      = depthE.estimateDepth(bbs, humanHeight, intrinsicParams);
   double threshold = 0.5;
   EXPECT_EQ(computedDepths.size(), depths.size());
   ASSERT_NEAR(depths[0], computedDepths[0], threshold);
@@ -49,7 +50,8 @@ TEST(depthEstimation, estimatePos) {
   vector<vector<double>> positions = {
       {0.35, 0.1, 1.26},
       {-0.49, 0.0345, 1.18}};
-  vector<vector<double>> computedPositions = depthE.transform2dTo3d(bbs, humanHeight, intrinsicParams);
+  vector<vector<double>> computedPositions
+      = depthE.transform2dTo3d(bbs, humanHeight, intrinsicParams);
 
   EXPECT_EQ(computedPositions.size(), positions.size());
   ASSERT_NEAR(computedPositions[0][0], computedPositions[0][0], threshold);

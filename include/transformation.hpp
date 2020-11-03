@@ -7,7 +7,9 @@
  */
 #pragma once
 #include<bits/stdc++.h>
+#include<vector>
 
+using std::vector;
 
 namespace vision {
 

@@ -5,21 +5,22 @@
 * @copyright Vasista Ayyagari, Vishnuu Appaya Dhanabalan, 2020
 */
 #include <bits/stdc++.h>
+#include <cstring>
+#include <ctime>
+#include <typeinfo>
 #include "opencv2/opencv.hpp"
 #include <opencv2/tracking/tracker.hpp>
 #include <opencv2/dnn/dnn.hpp>
 #include "detTrack.hpp"
-#include <typeinfo>
 #include <opencv2/core/utility.hpp>
 #include <opencv2/tracking.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv2/highgui.hpp>
-#include <cstring>
-#include <ctime>
+
 
 using std::vector;
 using vision::DetTrack;
-using namespace cv;
+using cv;
 
 /**
 * @brief A constructor function for the DetTrack class
@@ -56,13 +57,14 @@ void DetTrack::addTrackers
 (cv::Mat *inImg, vector<vector<int>> bbDet) {
     std::vector<Ptr<Tracker> > algorithms;
     vector<Rect2d> objects;
-    for(auto box : bbDet){
-        if(box[3]-box[1]< 100) continue;
+    for (auto box : bbDet) {
+        if (box[3]-box[1] < 100) continue;
         algorithms.push_back(cv::TrackerCSRT::create());
-        objects.push_back(cv::Rect(box[0], box[1], box[2]-box[0], box[3]-box[1]));
+        objects.push_back(cv::Rect(box[0], box[1],
+                       box[2]-box[0], box[3]-box[1]));
     }
 
-    trackers->add(algorithms,*inImg,objects);
+    trackers->add(algorithms, *inImg, objects);
 }
 
 
@@ -72,8 +74,9 @@ void DetTrack::addTrackers
 * @return None
 */
 vector<vector<int>> DetTrack::detectHumans(cv::Mat *inImg) {
-    Mat blob = cv::dnn::blobFromImage(*inImg, 1/255.0, Size(imageWidth, imageHeight), Scalar(), false, false);
-    yoloModel.setInput(blob, ""); // remaining params were optional.
+    Mat blob = cv::dnn::blobFromImage(*inImg, 1/255.0,
+      Size(imageWidth, imageHeight), Scalar(), false, false);
+    yoloModel.setInput(blob, "");  // remaining params were optional.
     yoloModel.forward(detectedObjects, outNames);
     // std::cout << detectedObjects.size() << std::endl;
     // std::cout << detectedObjects[1].size() << std::endl;
@@ -82,48 +85,60 @@ vector<vector<int>> DetTrack::detectHumans(cv::Mat *inImg) {
     vector<int> classes;
     vector<float> confidenceVals;
     vector<cv::Rect> predictions;
-    if(detectedObjects.size() > 0) {
+    if (detectedObjects.size() > 0) {
         // iterate over detections
-        for(auto detections : detectedObjects) {
+        for (auto detections : detectedObjects) {
             float* detection = reinterpret_cast<float *>(detections.data);
-            for(auto i = 0; i < detections.rows; i++, detection += detections.cols) {
-                cv::Mat predScores = detections.row(i).colRange(5, detections.cols);
+            for (auto i = 0; i < detections.rows; i++,
+                      detection += detections.cols) {
+                cv::Mat predScores = detections.row(i).colRange(5,
+                                                          detections.cols);
                 cv::Point2i classId;
                 double confidence;
                 cv::minMaxLoc(predScores, 0, &confidence, 0, &classId);
                 // std::cout << "confidence vals"<< confidence << std::endl;
-                if(confidence > confThreshold) {
-                    auto centerXCoord = static_cast<int>(detection[0]*(inImg->cols));
-                    auto centerYCoord = static_cast<int>(detection[1]*(inImg->rows));
-                    auto boxWidth = static_cast<int>(detection[2]*(inImg->cols));
-                    auto boxHeight = static_cast<int>(detection[3]*(inImg->rows));
-                    auto topLeftX = (centerXCoord - boxWidth >=0)?(centerXCoord - boxWidth):0;
-                    auto topLeftY = (centerYCoord - boxHeight >=0)?(centerYCoord - boxHeight):0;
+                if (confidence > confThreshold) {
+                    auto centerXCoord =
+                                  static_cast<int>(detection[0]*(inImg->cols));
+                    auto centerYCoord =
+                                  static_cast<int>(detection[1]*(inImg->rows));
+                    auto boxWidth =
+                                  static_cast<int>(detection[2]*(inImg->cols));
+                    auto boxHeight =
+                                  static_cast<int>(detection[3]*(inImg->rows));
+                    auto topLeftX =
+                    (centerXCoord - boxWidth >=0)?(centerXCoord - boxWidth):0;
+                    auto topLeftY =
+                    (centerYCoord - boxHeight >=0)?(centerYCoord - boxHeight):0;
                     classes.push_back(classId.x);
                     confidenceVals.push_back(static_cast<float>(confidence));
-                    predictions.push_back(cv::Rect(topLeftX, topLeftY, boxWidth, boxHeight));
+                    predictions.push_back(cv::Rect(topLeftX,
+                           topLeftY, boxWidth, boxHeight));
                 }
             }
         }
     }
     // NMSing
     vector<int> indexes;
-    cv::dnn::NMSBoxes(predictions, confidenceVals, confThreshold, nmsThreshold, indexes);
-    for( auto idx : indexes){
-        if(classes[idx] ==0){
+    cv::dnn::NMSBoxes(predictions, confidenceVals,
+     confThreshold, nmsThreshold, indexes);
+    for (auto idx : indexes) {
+        if (classes[idx] ==0) {
             // std::cout << "drawing" << std::endl;
             cv::Rect rect = predictions[idx];
-            int bottomRightX = (rect.x + rect.width <=416)?(rect.x + rect.width):416;
-            int bottomRightY = (rect.y + rect.height <=416)?(rect.y + rect.height):416;
-            // cv::rectangle(reImg, cv::Point(rect.x, rect.y),  
-            //     cv::Point(bottomRightX, bottomRightY), cv::Scalar(0,255,0), 3);
+            int bottomRightX =
+            (rect.x + rect.width <=416)?(rect.x + rect.width):416;
+            int bottomRightY =
+            (rect.y + rect.height <=416)?(rect.y + rect.height):416;
+            // cv::rectangle(reImg, cv::Point(rect.x, rect.y),
+            // cv::Point(bottomRightX, bottomRightY), cv::Scalar(0,255,0), 3);
             std::vector<int> temp{rect.x, rect.y, bottomRightX, bottomRightY};
             bbs.push_back(temp);
         }
     }
     // cv::imwrite("window.bmp", reImg);
     // *inImg = reImg;
-    
+
     return bbs;
 }
 
@@ -133,31 +148,29 @@ vector<vector<int>> DetTrack::detectHumans(cv::Mat *inImg) {
 * @return None
 */
 vector<vector<int>> DetTrack::trackHumans(cv::Mat *inImg) {
-    // as of now boxes are being drawn on 416, 416 img. 
-    // as of now tracking is only done on first frame detections. 
+    // as of now boxes are being drawn on 416, 416 img.
+    // as of now tracking is only done on first frame detections.
     if (count == 0) {
         auto boxes = detectHumans(inImg);
-        if(boxes.size() > 0){
-        addTrackers(inImg, boxes); 
+        if (boxes.size() > 0) {
+        addTrackers(inImg, boxes);
         }
     }
     ++count;
 
     trackers->update(*inImg);
     vector<vector<int>> bbs;
-    for(unsigned i=0; i< trackers->getObjects().size(); i++) {
-
-        vector<int> bb = {  
-                            (int)(trackers->getObjects()[i].x + 0.4*trackers->getObjects()[i].width),
-                            (int)(trackers->getObjects()[i].y + 0.1*trackers->getObjects()[i].height),
-                            (int)(trackers->getObjects()[i].width),
-                            (int)(trackers->getObjects()[i].height)
-                          };
+    for (unsigned i=0; i< trackers->getObjects().size(); i++) {
+        vector<int> bb = {
+        static_cast<int>(trackers->getObjects()[i].x
+                 + 0.4*trackers->getObjects()[i].width),
+        static_cast<int>(trackers->getObjects()[i].y
+                 + 0.1*trackers->getObjects()[i].height),
+        static_cast<int>(trackers->getObjects()[i].width),
+        static_cast<int>(trackers->getObjects()[i].height)
+        };
 
         bbs.emplace_back(bb);
-    }    
-    
+    }
     return bbs;
 }
-
-

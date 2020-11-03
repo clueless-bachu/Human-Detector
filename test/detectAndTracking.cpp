@@ -28,15 +28,15 @@ class checkDetTrackClass : public ::testing::Test {
   string modelWeightsPath = "";
   string imgPath = "";
   string labelPath = "";
-  cv::Mat img;// = cv::imread(imgPath);
-  DetTrack *tracker;
+  cv::Mat img;  // = cv::imread(imgPath);
+  DetTrahck *tracker;
 
  public:
   /**
   * @brief Constructor class for checkDetTrackClass
   * @param None
   * @return None
-  */
+  */h
   checkDetTrackClass() {
   }  // constructor
 
@@ -58,7 +58,6 @@ class checkDetTrackClass : public ::testing::Test {
     string modelWeightsPath = "../model/yolov3.weights";
     imgPath = "/home/vasista/Desktop/Human-Detector/data/sample_image.png";
     tracker = new DetTrack(modelConfigPath, modelWeightsPath);
-
   }
 
   /**
@@ -118,14 +117,14 @@ TEST_F(checkDetTrackClass, detectAndTrackTest) {
   labels[0][3] = 287+45;
   labels[0][4] = 2;
   cv::Mat pImg;
-  cv::resize(img, pImg, cv::Size(416,416));
+  cv::resize(img, pImg, cv::Size(416, 416));
   vector<vector<int>> boxes = tracker->trackHumans(&pImg);
 
   bool match_found = false;
   for (auto box : boxes) {
     match_found = false;
     for (auto label : labels) {
-      vector<int> bb = {box[0],box[1],box[0]+box[2],box[1]+box[3]};
+      vector<int> bb = {box[0], box[1], box[0]+box[2], box[1]+box[3]};
       auto iou = calcIOU(bb, label);
       if (iou >= iouThreshold) {
         match_found = true;

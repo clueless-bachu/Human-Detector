@@ -33,7 +33,7 @@ Transformation::~Transformation() {
 * @return None
 */
 void Transformation::setTransform(vector<double> transMat) {
-	this->transform = transMat;
+    this->transform = transMat;
     return;
 }
 
@@ -53,9 +53,12 @@ vector<double> Transformation::getTransform() {
 */
 vector<double> Transformation::transformToRoboFrame(vector<double> camCord) {
     vector<double>  newCords = {
-this->transform[0]*camCord[0]+this->transform[1]*camCord[1]+this->transform[2]*camCord[2]+this->transform[3],
-this->transform[4]*camCord[0]+this->transform[5]*camCord[1]+this->transform[6]*camCord[2]+this->transform[7],
-this->transform[8]*camCord[0]+this->transform[9]*camCord[1]+this->transform[10]*camCord[2]+this->transform[11]
+this->transform[0]*camCord[0] + this->transform[1]*camCord[1]
++ this->transform[2]*camCord[2] + this->transform[3],
+this->transform[4]*camCord[0] + this->transform[5]*camCord[1]
++ this->transform[6]*camCord[2] + this->transform[7],
+this->transform[8]*camCord[0] + this->transform[9]*camCord[1]
++this->transform[10]*camCord[2] + this->transform[11]
     };
     return newCords;
 }
